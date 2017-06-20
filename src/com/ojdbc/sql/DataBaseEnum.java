@@ -4,6 +4,21 @@
  */
 package com.ojdbc.sql;
 
+import com.ojdbc.sql.connection.AccessDataBaseConnection;
+import com.ojdbc.sql.connection.MongoDataBaseConnection;
+import com.ojdbc.sql.connection.MySQLDataBaseConnection;
+import com.ojdbc.sql.connection.OracleDataBaseConnection;
+import com.ojdbc.sql.connection.PostgreSQLDataBaseConnection;
+import com.ojdbc.sql.connection.SQLServerDataBaseConnection;
+import com.ojdbc.sql.connection.SQLiteDataBaseConnection;
+import com.ojdbc.sql.database.AccessDataBase;
+import com.ojdbc.sql.database.MongoDataBase;
+import com.ojdbc.sql.database.MySQLDataBase;
+import com.ojdbc.sql.database.OracleDataBase;
+import com.ojdbc.sql.database.PostgreSQLDataBase;
+import com.ojdbc.sql.database.SQLServerDataBase;
+import com.ojdbc.sql.database.SQLiteDataBase;
+
 /**
  * Author: ShaoGaige
  * Description: 数据库类型枚举
@@ -14,15 +29,27 @@ public enum DataBaseEnum implements IDataSource {
 	/**
 	 * Oracle
 	 */
-	ORACLE{
+	 ORACLE{
+		 
+		@Override
+		public String getDataBaseName() {
+			// TODO Auto-generated method stub
+			return "Oracle";
+		}
 
 		@Override
-		public <T extends IConnection> DataBaseType createDataBaseType(
-				String dataBaseType, T dataBaseClass) {
+		public IConnection getConnection() {
 			// TODO Auto-generated method stub
-			return new DataBaseType(dataBaseType,dataBaseClass);
+			return new OracleDataBaseConnection();
 		}
-	
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends DataBase> Class<T> getDataBase() {
+			// TODO Auto-generated method stub
+			return (Class<T>) OracleDataBase.class;
+		}
+		
 	},
 	/**
 	 * MySQL
@@ -30,11 +57,24 @@ public enum DataBaseEnum implements IDataSource {
 	MYSQL{
 
 		@Override
-		public <T extends IConnection> DataBaseType createDataBaseType(
-				String dataBaseType, T dataBaseClass) {
+		public String getDataBaseName() {
 			// TODO Auto-generated method stub
-			return new DataBaseType(dataBaseType,dataBaseClass);
+			return "MySQL";
 		}
+
+		@Override
+		public IConnection getConnection() {
+			// TODO Auto-generated method stub
+			return new MySQLDataBaseConnection();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends DataBase> Class<T> getDataBase() {
+			// TODO Auto-generated method stub
+			return (Class<T>) MySQLDataBase.class;
+		}
+
 	
 	},
 	/**
@@ -43,12 +83,23 @@ public enum DataBaseEnum implements IDataSource {
 	SQLSERVER{
 
 		@Override
-		public <T extends IConnection> DataBaseType createDataBaseType(
-				String dataBaseType, T dataBaseClass) {
+		public String getDataBaseName() {
 			// TODO Auto-generated method stub
-			return new DataBaseType(dataBaseType,dataBaseClass);
+			return "SQLServer";
 		}
-	
+
+		@Override
+		public IConnection getConnection() {
+			// TODO Auto-generated method stub
+			return new SQLServerDataBaseConnection();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends DataBase> Class<T> getDataBase() {
+			// TODO Auto-generated method stub
+			return (Class<T>) SQLServerDataBase.class;
+		}
 	},
 	/**
 	 * SQLite
@@ -56,10 +107,22 @@ public enum DataBaseEnum implements IDataSource {
 	SQSLITE{
 
 		@Override
-		public <T extends IConnection> DataBaseType createDataBaseType(
-				String dataBaseType, T dataBaseClass) {
+		public String getDataBaseName() {
 			// TODO Auto-generated method stub
-			return new DataBaseType(dataBaseType,dataBaseClass);
+			return "SQLite";
+		}
+
+		@Override
+		public IConnection getConnection() {
+			// TODO Auto-generated method stub
+			return new SQLiteDataBaseConnection();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends DataBase> Class<T> getDataBase() {
+			// TODO Auto-generated method stub
+			return (Class<T>) SQLiteDataBase.class;
 		}
 	
 	},
@@ -69,10 +132,22 @@ public enum DataBaseEnum implements IDataSource {
 	POSTGRESQL{
 
 		@Override
-		public <T extends IConnection> DataBaseType createDataBaseType(
-				String dataBaseType, T dataBaseClass) {
+		public String getDataBaseName() {
 			// TODO Auto-generated method stub
-			return new DataBaseType(dataBaseType,dataBaseClass);
+			return "PostgreSQL";
+		}
+
+		@Override
+		public IConnection getConnection() {
+			// TODO Auto-generated method stub
+			return new PostgreSQLDataBaseConnection();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends DataBase> Class<T> getDataBase() {
+			// TODO Auto-generated method stub
+			return (Class<T>) PostgreSQLDataBase.class;
 		}
 	
 	},
@@ -82,12 +157,23 @@ public enum DataBaseEnum implements IDataSource {
 	MONGODB{
 
 		@Override
-		public <T extends IConnection> DataBaseType createDataBaseType(
-				String dataBaseType, T dataBaseClass) {
+		public String getDataBaseName() {
 			// TODO Auto-generated method stub
-			return new DataBaseType(dataBaseType,dataBaseClass);
+			return "MongoDB";
 		}
-	
+
+		@Override
+		public IConnection getConnection() {
+			// TODO Auto-generated method stub
+			return new MongoDataBaseConnection();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends DataBase> Class<T> getDataBase() {
+			// TODO Auto-generated method stub
+			return (Class<T>) MongoDataBase.class;
+		}
 	},
 	/**
 	 * Access
@@ -95,12 +181,23 @@ public enum DataBaseEnum implements IDataSource {
 	ACCESS{
 
 		@Override
-		public <T extends IConnection> DataBaseType createDataBaseType(
-				String dataBaseType, T dataBaseClass) {
+		public String getDataBaseName() {
 			// TODO Auto-generated method stub
-			return new DataBaseType(dataBaseType,dataBaseClass);
+			return "Access";
 		}
-	
+
+		@Override
+		public IConnection getConnection() {
+			// TODO Auto-generated method stub
+			return new AccessDataBaseConnection();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T extends DataBase> Class<T> getDataBase() {
+			// TODO Auto-generated method stub
+			return (Class<T>) AccessDataBase.class;
+		}
 	};
 
 }

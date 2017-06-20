@@ -11,11 +11,19 @@ package com.ojdbc.sql;
  */
 public interface IDataSource {
 	/**
-	 * 数据库类型实现接口
-	 * @param dataBaseType
-	 * @param dataBaseClass
-	 * @return DataBaseType
+	 * 数据库类型的名称
+	 * @return String
 	 */
-	public <T extends IConnection> DataBaseType createDataBaseType(String dataBaseType,T dataBaseClass);
+	public String getDataBaseName();
+	/**
+	 * 数据库连接
+	 * @return IConnection
+	 */
+	public IConnection getConnection();
+	/**
+	 * 数据库实例
+	 * @return T extends DataBase
+	 */
+	public <T extends DataBase> Class<T> getDataBase();
 
 }

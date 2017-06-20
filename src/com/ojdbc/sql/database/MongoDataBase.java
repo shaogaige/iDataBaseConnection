@@ -4,8 +4,7 @@
  */
 package com.ojdbc.sql.database;
 
-import java.sql.Connection;
-
+import com.ojdbc.sql.ConnectionObject;
 import com.ojdbc.sql.DataBase;
 
 /**
@@ -15,7 +14,7 @@ import com.ojdbc.sql.DataBase;
  */
 public class MongoDataBase extends DataBase {
 
-	public MongoDataBase(Connection conn) {
+	public MongoDataBase(ConnectionObject conn) {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}

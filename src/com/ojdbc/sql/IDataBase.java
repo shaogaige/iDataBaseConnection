@@ -5,6 +5,7 @@
 package com.ojdbc.sql;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: ShaoGaige
@@ -122,5 +123,17 @@ public interface IDataBase {
 	 * @return boolean
 	 */
 	public boolean exeMixedBatchSQL(MixedBatchSQL mixedBatchSQL);
+	/**
+	 * 开启事务执行SQL语句
+	 * @param sqls
+	 * @return boolean
+	 */
+	public boolean exeTransactionSQL(List<String> sqls);
+	/**
+	 * 开启事务执行Prepared SQL语句
+	 * @param psqls
+	 * @return boolean
+	 */
+	public boolean exeTransactionPreparedSQL(Map<String,PreparedParam> psqls);
 
 }

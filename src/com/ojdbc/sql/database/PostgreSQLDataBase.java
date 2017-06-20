@@ -4,8 +4,7 @@
  */
 package com.ojdbc.sql.database;
 
-import java.sql.Connection;
-
+import com.ojdbc.sql.ConnectionObject;
 import com.ojdbc.sql.DataBase;
 
 /**
@@ -15,7 +14,7 @@ import com.ojdbc.sql.DataBase;
  */
 public class PostgreSQLDataBase extends DataBase {
 
-	public PostgreSQLDataBase(Connection conn) {
+	public PostgreSQLDataBase(ConnectionObject conn) {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
