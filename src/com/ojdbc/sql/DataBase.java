@@ -11,6 +11,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
+import com.ojdbc.sql.ConnectionManager.ConnectionInfo;
 import com.ojdbc.sql.core.ResultSetUtil;
 import com.ojdbc.sql.core.SQLPreparedParamUtil;
 
@@ -22,42 +23,34 @@ import com.ojdbc.sql.core.SQLPreparedParamUtil;
 public class DataBase implements IDataBase{
 	
 	//数据库连接
-	private ConnectionObject conn = null;
+	private ConnectionInfo connInfo = null;
 	/**
 	 * 构造函数
 	 * @param conn
 	 * @throws Exception
 	 */
-	public DataBase(ConnectionObject conn)
+	public DataBase(ConnectionInfo connInfo)
 	{
-		if(conn != null)
+		if(connInfo != null)
 		{
-			this.conn = conn;
+			this.connInfo = connInfo;
 		}
 		else
 		{
-			//throw new Exception("Error: conn is null, DataBase construct fail !!!");
+			try
+			{
+				throw new Exception("Error: conninfo is null, DataBase construct fail !!!");
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
-	}
-	//销毁对象
-	protected void finalize()
-	{
-		//归还连接对象
-		if(conn != null)
-		{
-			DataBaseManager.returnConnectionObject(conn);
-		}
-		this.conn = null;
 	}
 	/**
-	 * 获取数据库连接
-	 * @return ConnectionObject
+	 * 获取数据库连接字符串信息
+	 * @return String
 	 */
-	public ConnectionObject getConn() {
-		return this.conn;
-	}
 	public String getConnectionString(){
-		return conn.getKey();	
+		return connInfo.getKey();	
 	}
 
 	/**
@@ -68,9 +61,10 @@ public class DataBase implements IDataBase{
 	@Override
 	public boolean exeSQLCreate(String sql)
 	{
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			Statement stat = this.conn.getConnection().createStatement();
+			Statement stat = conn.getConnection().createStatement();
 			stat.execute(sql);
 			stat.close();
 			return true;
@@ -80,13 +74,18 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exePreparedSQLCreate(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			PreparedStatement preStmt = this.conn.getConnection().prepareStatement(sql);
+			PreparedStatement preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.execute();
 			preStmt.close();
@@ -97,14 +96,19 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	
 	@Override
 	public SQLResultSet exeSQLSelect(String sql)
 	{
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			Statement stat = this.conn.getConnection().createStatement();
+			Statement stat = conn.getConnection().createStatement();
 			ResultSet rs = stat.executeQuery(sql);
 			List<SQLRow> resultSet = ResultSetUtil.getRowList(rs);
 			SQLResultSet r = new SQLResultSet(resultSet);
@@ -117,13 +121,18 @@ public class DataBase implements IDataBase{
 			
 			return null;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public SQLResultSet exePreparedSQLSelect(String sql,PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			PreparedStatement preStmt = this.conn.getConnection().prepareStatement(sql);
+			PreparedStatement preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			ResultSet rs = preStmt.executeQuery();
 			List<SQLRow> resultSet = ResultSetUtil.getRowList(rs);
@@ -137,13 +146,18 @@ public class DataBase implements IDataBase{
 			
 			return null;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exeSQLDrop(String sql) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			Statement stat = this.conn.getConnection().createStatement();
+			Statement stat = conn.getConnection().createStatement();
 			stat.execute(sql);
 			stat.close();
 			return true;
@@ -152,14 +166,19 @@ public class DataBase implements IDataBase{
 			e.printStackTrace();
 			
 			return false;
+		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
 		}
 	}
 	@Override
 	public boolean exePreparedSQLDrop(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			PreparedStatement preStmt = this.conn.getConnection().prepareStatement(sql);
+			PreparedStatement preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.execute();
 			preStmt.close();
@@ -170,13 +189,18 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exeSQLAlter(String sql) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			Statement stat = this.conn.getConnection().createStatement();
+			Statement stat = conn.getConnection().createStatement();
 			stat.execute(sql);
 			stat.close();
 			return true;
@@ -186,13 +210,18 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exePreparedSQLAlter(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			PreparedStatement preStmt = this.conn.getConnection().prepareStatement(sql);
+			PreparedStatement preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.execute();
 			preStmt.close();
@@ -203,13 +232,18 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exeSQLUpdate(String sql) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			Statement stat = this.conn.getConnection().createStatement();
+			Statement stat = conn.getConnection().createStatement();
 			stat.executeUpdate(sql);
 			stat.close();
 			return true;
@@ -219,13 +253,18 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exePreparedSQLUpdate(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			PreparedStatement preStmt = this.conn.getConnection().prepareStatement(sql);
+			PreparedStatement preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.executeUpdate();
 			preStmt.close();
@@ -236,13 +275,18 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public int exeSQLInsert(String sql) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			Statement stat = this.conn.getConnection().createStatement();
+			Statement stat = conn.getConnection().createStatement();
 			//stat.executeUpdate(sql);
 			int autoGeneratedKeys = 0;
 			stat.executeUpdate(sql, autoGeneratedKeys);
@@ -254,13 +298,18 @@ public class DataBase implements IDataBase{
 			
 			return 0;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public int exePreparedSQLInsert(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			PreparedStatement preStmt = this.conn.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement preStmt = conn.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.executeUpdate();
 			ResultSet rs = preStmt.getGeneratedKeys();
@@ -277,13 +326,18 @@ public class DataBase implements IDataBase{
 			
 			return 0;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exeSQLDelete(String sql) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			Statement stat = this.conn.getConnection().createStatement();
+			Statement stat = conn.getConnection().createStatement();
 			stat.executeUpdate(sql);
 			stat.close();
 			return true;
@@ -293,13 +347,18 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exePreparedSQLDelete(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			PreparedStatement preStmt = this.conn.getConnection().prepareStatement(sql);
+			PreparedStatement preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.executeUpdate();
 			preStmt.close();
@@ -310,13 +369,18 @@ public class DataBase implements IDataBase{
 			
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exeBatchSQL(List<String> sqls) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try
 		{
-			Statement stat = this.conn.getConnection().createStatement();
+			Statement stat = conn.getConnection().createStatement();
 			if(sqls!=null && sqls.size()>0)
 			{
 				int size = sqls.size();
@@ -337,13 +401,18 @@ public class DataBase implements IDataBase{
 			e.printStackTrace();
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exePreparedBatchSQL(String sql,List<PreparedParam> preparedParams) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
-			PreparedStatement preStmt = this.conn.getConnection().prepareStatement(sql);
+			PreparedStatement preStmt = conn.getConnection().prepareStatement(sql);
 			if(preparedParams!=null && preparedParams.size()>0)
 			{
 				int size = preparedParams.size();
@@ -366,16 +435,21 @@ public class DataBase implements IDataBase{
 			e.printStackTrace();
 			return false;
 		}
+		finally
+		{
+			ConnectionManager.returnConnectionObject(conn);
+		}
 	}
 	@Override
 	public boolean exeMixedBatchSQL(MixedBatchSQL mixedBatchSQL) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		if(mixedBatchSQL != null)
 		{
 			String pSQL = mixedBatchSQL.getPreparedSQL();
 			try 
 			{
-				PreparedStatement preStmt = this.conn.getConnection().prepareStatement(pSQL);
+				PreparedStatement preStmt = conn.getConnection().prepareStatement(pSQL);
 				List<PreparedParam> preparedParams = mixedBatchSQL.getPreparedParams();
 				if(preparedParams!=null && preparedParams.size()>0)
 				{
@@ -399,25 +473,30 @@ public class DataBase implements IDataBase{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			finally
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 		return false;
 	}
 	@Override
 	public boolean exeTransactionSQL(List<String> sqls) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
 			if(sqls!=null && sqls.size()>0)
 			{
-				this.conn.getConnection().setAutoCommit(false);
-			    Statement stat = this.conn.getConnection().createStatement();
+				conn.getConnection().setAutoCommit(false);
+			    Statement stat = conn.getConnection().createStatement();
 			    int size = sqls.size();
 			    for(int i=0;i<size;i++)
 			    {
 			    	stat.executeUpdate(sqls.get(i));
 			    }
 			    stat.close();
-			    this.conn.getConnection().commit();
+			    conn.getConnection().commit();
 			    return true;
 			}
 			return false;
@@ -425,7 +504,7 @@ public class DataBase implements IDataBase{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			try {
-				this.conn.getConnection().rollback();
+				conn.getConnection().rollback();
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -435,10 +514,14 @@ public class DataBase implements IDataBase{
 		finally
 		{
 			try {
-				this.conn.getConnection().setAutoCommit(true);
+				conn.getConnection().setAutoCommit(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			finally
+			{
+				ConnectionManager.returnConnectionObject(conn);
 			}
 		}
 		
@@ -447,24 +530,25 @@ public class DataBase implements IDataBase{
 	@Override
 	public boolean exeTransactionPreparedSQL(Map<String, PreparedParam> psqls) {
 		// TODO Auto-generated method stub
+		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
 		try 
 		{
 			if(psqls!=null && psqls.size()>0)
 			{
-				this.conn.getConnection().setAutoCommit(false);
+				conn.getConnection().setAutoCommit(false);
 				for(String sql:psqls.keySet())
 				{
 					PreparedParam param = psqls.get(sql);
 					if(param == null)
 					{
-						this.exeSQLUpdate(sql);
+						exeSQLUpdate(sql);
 					}
 					else
 					{
-						this.exePreparedSQLUpdate(sql, param);
+						exePreparedSQLUpdate(sql, param);
 					}
 				}
-				this.conn.getConnection().commit();
+				conn.getConnection().commit();
 				return true;
 			}
 			return false;
@@ -477,10 +561,14 @@ public class DataBase implements IDataBase{
 		finally
 		{
 			try {
-				this.conn.getConnection().setAutoCommit(true);
+				conn.getConnection().setAutoCommit(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			finally
+			{
+				ConnectionManager.returnConnectionObject(conn);
 			}
 		}
 		

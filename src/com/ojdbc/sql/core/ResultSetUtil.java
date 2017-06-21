@@ -22,7 +22,11 @@ import com.ojdbc.sql.Value;
  * Log:
  */
 public class ResultSetUtil {
-	
+	/**
+	 * 将ResultSet对象变成按照行存储的对象
+	 * @param rs
+	 * @return List<SQLRow>
+	 */
 	public static List<SQLRow> getRowList(ResultSet rs)
 	{
 		try 
@@ -56,7 +60,7 @@ public class ResultSetUtil {
 			return null;
 		}
 	}
-	
+	//获取Value
 	private static Value getValue(String columnName,int type,ResultSet rs)
 	{
 		Value value = new Value(type);

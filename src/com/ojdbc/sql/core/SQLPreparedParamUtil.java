@@ -16,7 +16,11 @@ import com.ojdbc.sql.Value;
  * Log:
  */
 public class SQLPreparedParamUtil {
-	
+	/**
+	 * 设置PreparedParam的参数
+	 * @param preStmt
+	 * @param preparedParam
+	 */
 	public static void setSQLPreparedParam(PreparedStatement preStmt,PreparedParam preparedParam)
 	{
 		if(preparedParam ==  null){
@@ -28,7 +32,7 @@ public class SQLPreparedParamUtil {
 			setValue(preStmt,i,preparedParam.getParam(i));
 		}
 	}
-	
+	//设置Value
 	private static void setValue(PreparedStatement preStmt,int index,Value value)
 	{
 		try 

@@ -16,7 +16,7 @@ public class ConnectionObject {
 	private Connection connection = null;
 	//连接标识
 	private String key;
-	
+	//构造函数
 	public ConnectionObject(String key,Connection connection)
 	{
 		if(key!=null && connection!=null)
@@ -25,11 +25,17 @@ public class ConnectionObject {
 			this.connection = connection;
 		}
 	}
-	
+	/**
+	 * 获取java.sql.Connection对象
+	 * @return Connection
+	 */
 	public Connection getConnection() {
 		return connection;
 	}
-
+	/**
+	 * 获取数据库连接标识
+	 * @return String
+	 */
 	public String getKey() {
 		return key;
 	}

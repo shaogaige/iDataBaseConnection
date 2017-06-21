@@ -15,6 +15,12 @@ public class DataBaseManagerTest {
 		DataBase sqlite = DataBaseManager.getDataBase(DataBaseEnum.MYSQL, dataBaseURL, userName, passWord);
         System.out.println(sqlite.getConnectionString());
         
+        String sql = "select * from noteinfo";
+        sqlite.exeSQLSelect(sql);
+        
+        String sql2 = "select * from noteinfo";
+        sqlite.exeSQLSelect(sql2);
+        
 		dataBaseURL = "jdbc:mongo://172.15.103.42:10001/geoglobe";
 		userName = "data";
 		passWord = "data";

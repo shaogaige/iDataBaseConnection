@@ -15,7 +15,7 @@ import java.util.List;
 public class SQLResultSet {
 	
 	private List<SQLRow> resultSet = new ArrayList<SQLRow>();
-	
+	//构造函数
 	public SQLResultSet(List<SQLRow> resultSet)
 	{
 		if(resultSet != null)

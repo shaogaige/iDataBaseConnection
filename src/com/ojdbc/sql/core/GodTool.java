@@ -7,7 +7,7 @@ package com.ojdbc.sql.core;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import com.ojdbc.sql.ConnectionObject;
+import com.ojdbc.sql.ConnectionManager.ConnectionInfo;
 import com.ojdbc.sql.DataBase;
 import com.ojdbc.sql.IDataSource;
 
@@ -17,13 +17,17 @@ import com.ojdbc.sql.IDataSource;
  * Log: 
  */
 public class GodTool {
-	
-	public static <T extends Enum<T> & IDataSource> DataBase newInstanceDataBase(T type,ConnectionObject conn)
+	/**
+	 * 利用反射构建DataBase对象
+	 * @param connInfo
+	 * @return DataBase
+	 */
+	public static <T extends Enum<T> & IDataSource> DataBase newInstanceDataBase(ConnectionInfo connInfo)
 	{
 		try 
 		{
-			Constructor<?> dataBaseConstr = type.getDataBase().getDeclaredConstructor(ConnectionObject.class);
-			DataBase dataBase= (DataBase) dataBaseConstr.newInstance(conn);
+			Constructor<?> dataBaseConstr = connInfo.getIDataSource().getDataBase().getDeclaredConstructor(ConnectionInfo.class);
+			DataBase dataBase= (DataBase) dataBaseConstr.newInstance(connInfo);
 			return dataBase;
 			
 		} catch (NoSuchMethodException e) {

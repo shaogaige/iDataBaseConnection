@@ -4,7 +4,7 @@
  */
 package com.ojdbc.sql.database;
 
-import com.ojdbc.sql.ConnectionObject;
+import com.ojdbc.sql.ConnectionManager.ConnectionInfo;
 import com.ojdbc.sql.DataBase;
 
 /**
@@ -14,9 +14,10 @@ import com.ojdbc.sql.DataBase;
  */
 public class MySQLDataBase extends DataBase {
 
-	public MySQLDataBase(ConnectionObject conn) {
-		super(conn);
+	public MySQLDataBase(ConnectionInfo connInfo) {
+		super(connInfo);
 		// TODO Auto-generated constructor stub
 	}
+
 
 }

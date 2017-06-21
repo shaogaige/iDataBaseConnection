@@ -5,11 +5,12 @@
 package com.ojdbc.sql.core;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 
+import com.ojdbc.sql.ConnectionManager;
 import com.ojdbc.sql.ConnectionObject;
-import com.ojdbc.sql.DataBaseManager;
 import com.ojdbc.sql.IConnection;
 
 /**
@@ -72,6 +73,18 @@ public class DBConnectionFactory implements KeyedPoolableObjectFactory {
 		//验证对象
 		if(arg1 != null)
 		{
+			//设置为自动提交
+			ConnectionObject conn = (ConnectionObject)arg1;
+			try {
+				boolean f = conn.getConnection().getAutoCommit();
+				if(!f){
+					conn.getConnection().setAutoCommit(true);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
 			return true;
 		}
 		else
@@ -80,10 +93,10 @@ public class DBConnectionFactory implements KeyedPoolableObjectFactory {
 		}
 		
 	}
-	
+	//创建连接对象
 	private ConnectionObject createConnectionObject(String key)
 	{
-		IConnection iconn = DataBaseManager.getIConnection(key);
+		IConnection iconn = ConnectionManager.getIConnection(key);
 		String[] info = new String[3];
 		String[] param = key.split("\\+");
 		for(int i=0;i<param.length && i<3;i++)
