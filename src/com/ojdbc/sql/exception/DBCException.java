@@ -20,28 +20,33 @@ public class DBCException {
 	
 	public final static String E_SQL_RollBack = "SQL\u56de\u6eda\u51fa\u73b0\u5f02\u5e38\uff01";
 	
-	public final static String E_IO_File_TXT = "\u5199\u5165TXT\u51fa\u73b0\u5f02\u5e38\uff01";
-	
-	public final static String E_IO_File_Create = "\u6587\u4ef6\u521b\u5efa\u51fa\u73b0\u5f02\u5e38\uff01";
-	
-	public final static String E_GZIP = "GZIPUtil\u538b\u7f29\u51fa\u73b0\u5f02\u5e38\uff01";
-	
 	public final static String E_DataBaseInit = "\u6570\u636e\u5e93\u521d\u59cb\u5316\u51fa\u73b0\u5f02\u5e38\uff01";
 	
-	public final static String E_IO_File_READ = "\u6587\u4ef6\u8bfb\u53d6\u51fa\u73b0\u5f02\u5e38\uff01";
+	public final static String E_ConnectionPoolInit = "\u6570\u636e\u5e93\u8fde\u63a5\u6c60\u521d\u59cb\u5316\u5931\u8d25\uff01";
 	
-	public final static String E_IO_File_NO = "\u8981\u8bfb\u53d6\u7684\u6587\u4ef6\u4e0d\u5b58\u5728\uff01";
+	public final static String E_GetConnectionFromPool = "\u4ece\u6570\u636e\u5e93\u8fde\u63a5\u6c60\u4e2d\u83b7\u53d6\u5bf9\u8c61\u5931\u8d25\uff01";
 	
-	public final static String E_IO_File_WRITE = "\u6587\u4ef6\u5199\u5165\u51fa\u73b0\u5f02\u5e38\uff01";
+	public final static String E_ReturnObject = "\u5f52\u8fd8\u5bf9\u8c61\u5230\u6570\u636e\u5e93\u8fde\u63a5\u6c60\u4e2d\u5931\u8d25\uff01";
+	
+	public final static String E_ReadConfig = "\u8bfb\u53d6\u914d\u7f6e\u6587\u4ef6\u51fa\u9519\uff01";
+	
+	public final static String E_ConnectionSetAutoCommit = "\u0043\u006f\u006e\u006e\u0065\u0063\u0074\u0069\u006f\u006e\u5c5e\u6027\u0041\u0075\u0074\u006f\u0043\u006f\u006d\u006d\u0069\u0074\u8bbe\u7f6e\u51fa\u9519\uff01";
+	
+	public final static String E_newInstanceDataBase = "\u5229\u7528\u53cd\u5c04\u521b\u5efa\u0044\u0061\u0074\u0061\u0042\u0061\u0073\u0065\u5bf9\u8c61\u51fa\u9519\uff01"; 
+	
+	public final static String E_ResultSet = "\u0052\u0065\u0073\u0075\u006c\u0074\u0053\u0065\u0074\u904d\u5386\u51fa\u73b0\u95ee\u9898\uff01";
+	
+	public final static String E_PreparedStatement = "\u0050\u0072\u0065\u0070\u0061\u0072\u0065\u0064\u0053\u0074\u0061\u0074\u0065\u006d\u0065\u006e\u0074\u8bbe\u7f6e\u53c2\u6570\u51fa\u73b0\u95ee\u9898\uff01";
 	
 	/**
 	 * 异常信息提示类
 	 * @param exceptionType
 	 * @param e
 	 */
-	public static void throwException(String exceptionType,Exception e)
+	public static void logException(String exceptionType,Exception e)
 	{
 		//显示异常信息
+		System.out.println(exceptionType);
 		System.out.println(e.getMessage());
 	}
 

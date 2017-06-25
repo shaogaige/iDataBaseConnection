@@ -13,8 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ojdbc.sql.SQLResultSet;
 import com.ojdbc.sql.SQLRow;
 import com.ojdbc.sql.Value;
+import com.ojdbc.sql.exception.DBCException;
 
 /**
  * Author: ShaoGaige
@@ -23,11 +25,11 @@ import com.ojdbc.sql.Value;
  */
 public class ResultSetUtil {
 	/**
-	 * 将ResultSet对象变成按照行存储的对象
+	 * 将ResultSet对象变成按照行存储的SQLResultSet对象
 	 * @param rs
-	 * @return List<SQLRow>
+	 * @return SQLResultSet
 	 */
-	public static List<SQLRow> getRowList(ResultSet rs)
+	public static SQLResultSet getSQLResultSet(ResultSet rs)
 	{
 		try 
 		{
@@ -53,10 +55,13 @@ public class ResultSetUtil {
 				SQLRow row = new SQLRow(keyValue);
 				resultSet.add(row);
 			}
-			return resultSet;
+			
+			SQLResultSet r = new SQLResultSet(resultSet);
+			return r;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			DBCException.logException(DBCException.E_ResultSet, e);
 			return null;
 		}
 	}
@@ -122,6 +127,7 @@ public class ResultSetUtil {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			DBCException.logException(DBCException.E_ResultSet, e);
 			return null;
 		}
 		return value;

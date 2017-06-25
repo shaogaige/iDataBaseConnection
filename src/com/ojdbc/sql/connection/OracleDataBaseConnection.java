@@ -29,7 +29,7 @@ public class OracleDataBaseConnection implements IConnection {
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			DBCException.throwException(DBCException.E_LoadJDBC, e);
+			DBCException.logException(DBCException.E_LoadJDBC, e);
 		}
 	}		
 
@@ -55,7 +55,7 @@ public class OracleDataBaseConnection implements IConnection {
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			DBCException.throwException(DBCException.E_GetConnection, e);
+			DBCException.logException(DBCException.E_GetConnection, e);
 			return null;
 		}
 		return conn;

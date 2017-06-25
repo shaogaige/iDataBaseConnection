@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import com.ojdbc.sql.PreparedParam;
 import com.ojdbc.sql.Value;
+import com.ojdbc.sql.exception.DBCException;
 
 /**
  * Author: ShaoGaige
@@ -93,6 +94,7 @@ public class SQLPreparedParamUtil {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			DBCException.logException(DBCException.E_PreparedStatement, e);
 		}
 		
 	}

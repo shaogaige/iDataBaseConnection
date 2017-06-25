@@ -5,9 +5,9 @@
 package com.ojdbc.sql.core;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import com.ojdbc.sql.ConnectionManager.ConnectionInfo;
+import com.ojdbc.sql.exception.DBCException;
 import com.ojdbc.sql.DataBase;
 import com.ojdbc.sql.IDataSource;
 
@@ -30,26 +30,12 @@ public class GodTool {
 			DataBase dataBase= (DataBase) dataBaseConstr.newInstance(connInfo);
 			return dataBase;
 			
-		} catch (NoSuchMethodException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			DBCException.logException(DBCException.E_newInstanceDataBase, e);
+			return null;
 		}
-		return null;
 	}
 
 }

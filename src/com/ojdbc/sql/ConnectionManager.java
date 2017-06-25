@@ -5,14 +5,13 @@
 package com.ojdbc.sql;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 
 import com.ojdbc.sql.core.DBConnectionFactory;
+import com.ojdbc.sql.exception.DBCException;
 
 /**
  * Author: ShaoGaige
@@ -22,8 +21,6 @@ import com.ojdbc.sql.core.DBConnectionFactory;
 public class ConnectionManager {
 	//对象池
 	private static GenericKeyedObjectPool connectionPool = null;
-	//保存key和IConnection
-	private static Map<String,IConnection> keyConnection = new HashMap<String,IConnection>();
 	//相关配置
 	private static Properties configContent = null;
 	
@@ -37,15 +34,7 @@ public class ConnectionManager {
 	{
 		init();
 	}
-	/**
-	 * 根据数据库连接标识获取连接接口
-	 * @param key
-	 * @return IConnection
-	 */
-	public static IConnection getIConnection(String key)
-	{
-		return keyConnection.get(key);
-	}
+	
 	/**
 	 * 获得数据库连接信息
 	 * @param type
@@ -65,12 +54,7 @@ public class ConnectionManager {
 	public static <T extends Enum<T> & IDataSource> ConnectionInfo getConnectionInfo(T type,String dataBaseURL,String userName,String passWord)
 	{
 		String key = dataBaseURL+"+"+userName+"+"+passWord;
-		IConnection conn = null;
-		if(!keyConnection.containsKey(key))
-		{
-			conn = type.getConnection();
-			keyConnection.put(key, conn);
-		}
+		DBConnectionFactory.getIConnection(key, type);
 		return new ConnectionInfo(key,type);
 	}
 	/**
@@ -92,16 +76,7 @@ public class ConnectionManager {
 	public static <T extends Enum<T> & IDataSource> ConnectionObject borrowConnectionObject(T type,String dataBaseURL,String userName,String passWord)
 	{
 		String key = dataBaseURL+"+"+userName+"+"+passWord;
-		IConnection conn = null;
-		if(keyConnection.containsKey(key))
-		{
-			conn = keyConnection.get(key);
-		}
-		else
-		{
-			conn = type.getConnection();
-			keyConnection.put(key, conn);
-		}
+		
 		ConnectionObject connobject = null;
 		try 
 		{
@@ -109,6 +84,7 @@ public class ConnectionManager {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			DBCException.logException(DBCException.E_GetConnectionFromPool, e);
 			return null;
 		}
 		return connobject;
@@ -129,6 +105,7 @@ public class ConnectionManager {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			DBCException.logException(DBCException.E_GetConnectionFromPool, e);
 			return null;
 		}
 		return connobject;
@@ -147,11 +124,12 @@ public class ConnectionManager {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			DBCException.logException(DBCException.E_ReturnObject, e);
 			return false;
 		}
 	}
 	/**
-	 * 根据配置信息初始化连接池
+	 * 根据配置信息初始化连接池，配置文件路径./config/ConnectionPool.properties
 	 * @param type
 	 * @param dataBaseURL
 	 *   [数据库类别：dataBaseURL值的写法]
@@ -168,16 +146,7 @@ public class ConnectionManager {
 	public static <T extends Enum<T> & IDataSource> void initConnectionPoolByConfigure(T type,String dataBaseURL,String userName,String passWord)
 	{
 		String key = dataBaseURL+"+"+userName+"+"+passWord;
-		IConnection conn = null;
-		if(keyConnection.containsKey(key))
-		{
-			conn = keyConnection.get(key);
-		}
-		else
-		{
-			conn = type.getConnection();
-			keyConnection.put(key, conn);
-		}
+		DBConnectionFactory.getIConnection(key, type);
 		
 		ConnectionObject connobject = null;
 		int size = Integer.parseInt(configContent.getProperty("minIdle"));
@@ -191,6 +160,7 @@ public class ConnectionManager {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				DBCException.logException(DBCException.E_ConnectionPoolInit, e);
 			}
 		}
 	}
@@ -254,6 +224,7 @@ public class ConnectionManager {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			DBCException.logException(DBCException.E_ReadConfig, e);
 		}
 		return configParam;
 	}

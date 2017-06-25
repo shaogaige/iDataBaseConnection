@@ -30,7 +30,7 @@ public class SQLiteDataBaseConnection implements IConnection {
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			DBCException.throwException(DBCException.E_LoadJDBC, e);
+			DBCException.logException(DBCException.E_LoadJDBC, e);
 		}
 	}	
 
@@ -48,7 +48,13 @@ public class SQLiteDataBaseConnection implements IConnection {
 			String passWord) {
 		// TODO Auto-generated method stub
 		Connection conn = null;
-		File file = new File(dataBaseURL);
+		String path = dataBaseURL;
+		int length = dataBaseURL.indexOf("//")+2;
+		if(length < dataBaseURL.length())
+		{
+			path = dataBaseURL.substring(length);
+		}
+		File file = new File(path);
 		if(!file.getParentFile().exists())
 		{
 			file.getParentFile().mkdirs();
@@ -61,7 +67,7 @@ public class SQLiteDataBaseConnection implements IConnection {
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			DBCException.throwException(DBCException.E_GetConnection, e);
+			DBCException.logException(DBCException.E_GetConnection, e);
 			return null;
 		}
 		return conn;
