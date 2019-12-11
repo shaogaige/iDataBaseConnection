@@ -35,7 +35,24 @@ public class SQLRow {
 	 */
 	public Value getValue(String columnName)
 	{
-		return this.row.get(columnName);
+		Value v = this.row.get(columnName);
+		if(v != null)
+		{
+			return v;
+		}
+		else
+		{
+			v = this.row.get(columnName.toLowerCase());
+			if(v != null)
+			{
+				return v;
+			}
+			else
+			{
+				return this.row.get(columnName.toUpperCase());
+			}
+		}
+		
 	}
 	/**
 	 * 获取字段个数

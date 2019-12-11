@@ -88,6 +88,7 @@ public class ResultSetUtil {
 			   case Types.INTEGER:
 			   case Types.SMALLINT:
 				   value.setInt_value(rs.getInt(columnName));
+				   value.setLong_value(rs.getLong(columnName));
 				   break;
 			   case Types.BINARY:
 			   case Types.VARBINARY:
@@ -96,10 +97,16 @@ public class ResultSetUtil {
 				   break;
 			   case Types.BLOB:
 				   value.setBlob_value(rs.getBlob(columnName));
+				   value.setBytes_value(rs.getBytes(columnName));
+				   break;
+			   case Types.CLOB:
+				   value.setClob_value(rs.getClob(columnName));
+				   value.setString_value(rs.getString(columnName));
 				   break;
 			   case Types.NUMERIC:
 			   case Types.DECIMAL:
 				   value.setBigdecimal_value(rs.getBigDecimal(columnName));
+				   value.setDouble_value(rs.getDouble(columnName));
 				   break;
 			   case Types.BIT:
 			   case Types.BOOLEAN:
@@ -113,6 +120,7 @@ public class ResultSetUtil {
 				   break;
 			   case Types.REAL:
 				   value.setFloat_value(rs.getFloat(columnName));
+				   value.setDouble_value(rs.getDouble(columnName));
 				   break;
 			   case Types.DATE:
 				   value.setDate_value(rs.getDate(columnName));
@@ -122,7 +130,8 @@ public class ResultSetUtil {
 				   value.setTime_value(rs.getTime(columnName));
 				   break;
 			   default:
-				   value.setObject_value(rs.getObject(columnName)); 
+				   value.setObject_value(rs.getObject(columnName));
+				   value.setString_value(rs.getString(columnName));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -4,6 +4,7 @@
  */
 package com.ojdbc.sql;
 
+import java.sql.ResultSetMetaData;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,12 @@ public interface IDataBase {
 	 * @return boolean
 	 */
 	public boolean exePreparedSQLAlter(String sql,PreparedParam preparedParam);
+	/**
+	 * 执行Select语句获取表信息
+	 * @param sql
+	 * @return ResultSetMetaData
+	 */
+	public ResultSetMetaData getMetaData(String sql);
 	/**
 	 * 执行Select语句
 	 * @param sql

@@ -11,7 +11,7 @@ public class DataBaseManagerTest {
 		// TODO Auto-generated method stub
 		System.out.println("欢迎使用iDataBaseConnection.java");
 		System.out.println("Create by shaogaige 20170625");
-		//testCase();
+		testCase();
 	}
 	
 	public static void testCase(){
@@ -46,5 +46,7 @@ public class DataBaseManagerTest {
 		passWord = "autotest";
         DataBase oracle = DataBaseManager.getDataBase(DataBaseEnum.ORACLE, dataBaseURL, userName, passWord);
         System.out.println(oracle.getConnectionString());
+        
+        
 	}
 }

@@ -42,8 +42,8 @@ public class DBConnectionFactory implements KeyedPoolableObjectFactory {
 	public void destroyObject(Object arg0, Object arg1) throws Exception {
 		// TODO Auto-generated method stub
 		//销毁对象
-		String key = (String)arg0;
-		System.out.println("正在销毁连接对象:"+key);
+		//String key = (String)arg0;
+		//System.out.println("正在销毁连接对象:"+key);
 		if(arg1 != null)
 		{
 			ConnectionObject conn = (ConnectionObject)arg1;

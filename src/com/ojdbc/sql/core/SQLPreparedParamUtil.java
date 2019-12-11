@@ -58,6 +58,10 @@ public class SQLPreparedParamUtil {
 			{
 				preStmt.setBlob(index, value.getBlob_value());
 			}
+			else if(value.isClobValue())
+			{
+				preStmt.setClob(index, value.getClob_value());
+			}
 			else if(value.isBytesValue())
 			{
 				preStmt.setBytes(index, value.getBytes_value());
