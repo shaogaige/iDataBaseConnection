@@ -446,12 +446,14 @@ public class DataBase implements IDataBase{
 		{
 			preStmt = conn.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
-			preStmt.executeUpdate();
-			rs = preStmt.getGeneratedKeys();
-			int num = 0;
-			if(rs.next())
+			int f = preStmt.executeUpdate();
+			//rs = preStmt.getGeneratedKeys();
+			int num = 1;
+			//if(rs.next())
+			if(f == 0)
 			{
-				num = rs.getInt(1);
+				//num = rs.getInt(1);
+				num = 0;
 			}
 			return num;
 		} catch (SQLException e) {
