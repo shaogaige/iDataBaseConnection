@@ -65,6 +65,59 @@ public class ResultSetUtil {
 			return null;
 		}
 	}
+	/**
+	 * 将ResultSet对象变成按照行存储的SQLResultSet对象，支持分页
+	 * @param rs start count
+	 * @return SQLResultSet
+	 */
+	public static SQLResultSet getSQLResultSet(ResultSet rs, int start, int count)
+	{
+		try 
+		{
+			ResultSetMetaData resultMetaData = rs.getMetaData();
+			Map<String,Integer> columnNames = new LinkedHashMap<String,Integer>();
+			int size = resultMetaData.getColumnCount();
+			//获取所有列名称
+			for(int i=1;i<=size;i++)
+			{
+				columnNames.put(resultMetaData.getColumnName(i),resultMetaData.getColumnType(i));
+			}
+			List<SQLRow> resultSet = new ArrayList<SQLRow>();
+			int current = 0,cou = 1;
+			while(rs.next())
+			{
+				current++;
+				if(current < start)
+				{
+					continue;
+				}
+				Map<String,Value> keyValue = new LinkedHashMap<String,Value>();
+				//按照行整理每个字段的数据
+				for(String key:columnNames.keySet())
+				{
+					int type = columnNames.get(key);
+					Value value = getValue(key,type,rs);
+					keyValue.put(key, value);
+				}
+				SQLRow row = new SQLRow(keyValue);
+				resultSet.add(row);
+				
+				cou++;
+				if(cou>count)
+				{
+					break;
+				}
+			}
+			
+			SQLResultSet r = new SQLResultSet(resultSet);
+			return r;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			DBCException.logException(DBCException.E_ResultSet, e);
+			return null;
+		}
+	}
 	//获取Value
 	private static Value getValue(String columnName,int type,ResultSet rs)
 	{
