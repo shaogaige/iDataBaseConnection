@@ -64,10 +64,11 @@ public class DataBase implements IDataBase{
 	@Override
 	public boolean exeSQLCreate(String sql)
 	{
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			stat.execute(sql);
 			return true;
@@ -89,16 +90,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exePreparedSQLCreate(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		PreparedStatement preStmt = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.execute();
@@ -121,23 +126,25 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	
 	@Override
 	public SQLResultSet exeSQLSelect(String sql)
 	{
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		ResultSet rs = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			rs = stat.executeQuery(sql);
 			SQLResultSet r = ResultSetUtil.getSQLResultSet(rs);
-			
-			
 			return r;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -161,17 +168,62 @@ public class DataBase implements IDataBase{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
+		}
+	}
+	@Override
+	public SQLResultSet exeSQLSelect(String sql, int start, int count) {
+		// TODO Auto-generated method stub
+		ConnectionObject conn = null;
+		Statement stat = null;
+		ResultSet rs = null;
+		try 
+		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
+			stat = conn.getConnection().createStatement();
+			rs = stat.executeQuery(sql);
+			SQLResultSet r = ResultSetUtil.getSQLResultSet(rs,start,count);
+			return r;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			DBCException.logException(DBCException.E_SQL, e);
+			return null;
+		}
+		finally
+		{
+			try 
+			{
+				if(rs != null)
+				{
+					rs.close();
+				}
+				if(stat != null)
+				{
+					stat.close();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public SQLResultSet exePreparedSQLSelect(String sql,PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		PreparedStatement preStmt = null;
 		ResultSet rs = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			rs = preStmt.executeQuery();
@@ -199,17 +251,62 @@ public class DataBase implements IDataBase{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
+		}
+	}
+	@Override
+	public SQLResultSet exePreparedSQLSelect(String sql, PreparedParam preparedParam, int start, int count) {
+		// TODO Auto-generated method stub
+		ConnectionObject conn = null;
+		PreparedStatement preStmt = null;
+		ResultSet rs = null;
+		try 
+		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
+			preStmt = conn.getConnection().prepareStatement(sql);
+			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
+			rs = preStmt.executeQuery();
+			SQLResultSet r = ResultSetUtil.getSQLResultSet(rs,start,count);
+			return r;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			DBCException.logException(DBCException.E_SQL, e);
+			return null;
+		}
+		finally
+		{
+			try 
+			{
+				if(rs != null)
+				{
+					rs.close();
+				}
+				if(preStmt != null)
+				{
+					preStmt.close();
+				}
+			}catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exeSQLDrop(String sql) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			stat.execute(sql);
 			return true;
@@ -230,16 +327,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exePreparedSQLDrop(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		PreparedStatement preStmt = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.execute();
@@ -262,16 +363,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exeSQLAlter(String sql) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			stat.execute(sql);
 			return true;
@@ -293,16 +398,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exePreparedSQLAlter(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		PreparedStatement preStmt = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.execute();
@@ -326,16 +435,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exeSQLUpdate(String sql) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			stat.executeUpdate(sql);
 			return true;
@@ -357,16 +470,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exePreparedSQLUpdate(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		PreparedStatement preStmt = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.executeUpdate();
@@ -389,28 +506,32 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public int exeSQLInsert(String sql) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		ResultSet rs = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			//stat.executeUpdate(sql);
-			int autoGeneratedKeys = 0;
-			stat.executeUpdate(sql);
-			rs = stat.getGeneratedKeys();
-			if(rs.next())
-			{
-				autoGeneratedKeys = rs.getInt(1);
-			}
+			//int autoGeneratedKeys = 0;
+			int f = stat.executeUpdate(sql);
+			//rs = stat.getGeneratedKeys();
+			//if(rs.next())
+			//{
+				//autoGeneratedKeys = rs.getInt(1);
+			//}
 			
-			return autoGeneratedKeys;
+			return f;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -433,29 +554,26 @@ public class DataBase implements IDataBase{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public int exePreparedSQLInsert(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		PreparedStatement preStmt = null;
 		ResultSet rs = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			preStmt = conn.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			int f = preStmt.executeUpdate();
 			//rs = preStmt.getGeneratedKeys();
-			int num = 1;
-			//if(rs.next())
-			if(f == 0)
-			{
-				//num = rs.getInt(1);
-				num = 0;
-			}
-			return num;
+			return f;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -478,16 +596,20 @@ public class DataBase implements IDataBase{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exeSQLDelete(String sql) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			stat.executeUpdate(sql);
 			return true;
@@ -509,16 +631,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exePreparedSQLDelete(String sql, PreparedParam preparedParam) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		PreparedStatement preStmt = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			preStmt = conn.getConnection().prepareStatement(sql);
 			SQLPreparedParamUtil.setSQLPreparedParam(preStmt, preparedParam);
 			preStmt.executeUpdate();
@@ -541,16 +667,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exeBatchSQL(List<String> sqls) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		try
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			if(sqls!=null && sqls.size()>0)
 			{
@@ -584,16 +714,20 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exePreparedBatchSQL(String sql,List<PreparedParam> preparedParams) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		PreparedStatement preStmt = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			preStmt = conn.getConnection().prepareStatement(sql);
 			if(preparedParams!=null && preparedParams.size()>0)
 			{
@@ -629,19 +763,23 @@ public class DataBase implements IDataBase{
 					e.printStackTrace();
 				}
 			}
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 	@Override
 	public boolean exeMixedBatchSQL(MixedBatchSQL mixedBatchSQL) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		if(mixedBatchSQL != null)
 		{
 			String pSQL = mixedBatchSQL.getPreparedSQL();
 			PreparedStatement preStmt = null;
 			try 
 			{
+				conn = ConnectionManager.borrowConnectionObject(connInfo);
 				preStmt = conn.getConnection().prepareStatement(pSQL);
 				List<PreparedParam> preparedParams = mixedBatchSQL.getPreparedParams();
 				if(preparedParams!=null && preparedParams.size()>0)
@@ -678,7 +816,10 @@ public class DataBase implements IDataBase{
 						e.printStackTrace();
 					}
 				}
-				ConnectionManager.returnConnectionObject(conn);
+				if(conn != null)
+				{
+					ConnectionManager.returnConnectionObject(conn);
+				}
 			}
 		}
 		return false;
@@ -686,12 +827,13 @@ public class DataBase implements IDataBase{
 	@Override
 	public boolean exeTransactionSQL(List<String> sqls) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		try 
 		{
 			if(sqls!=null && sqls.size()>0)
 			{
+				conn = ConnectionManager.borrowConnectionObject(connInfo);
 				conn.getConnection().setAutoCommit(false);
 			    stat = conn.getConnection().createStatement();
 			    int size = sqls.size();
@@ -733,7 +875,10 @@ public class DataBase implements IDataBase{
 			}
 			finally
 			{
-				ConnectionManager.returnConnectionObject(conn);
+				if(conn != null)
+				{
+					ConnectionManager.returnConnectionObject(conn);
+				}
 			}
 		}
 		
@@ -742,11 +887,12 @@ public class DataBase implements IDataBase{
 	@Override
 	public boolean exeTransactionPreparedSQL(Map<String, PreparedParam> psqls) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		try 
 		{
 			if(psqls!=null && psqls.size()>0)
 			{
+				conn = ConnectionManager.borrowConnectionObject(connInfo);
 				conn.getConnection().setAutoCommit(false);
 				for(String sql:psqls.keySet())
 				{
@@ -796,7 +942,10 @@ public class DataBase implements IDataBase{
 			}
 			finally
 			{
-				ConnectionManager.returnConnectionObject(conn);
+				if(conn != null)
+				{
+					ConnectionManager.returnConnectionObject(conn);
+				}
 			}
 		}
 		
@@ -804,11 +953,12 @@ public class DataBase implements IDataBase{
 	@Override
 	public ResultSetMetaData getMetaData(String sql) {
 		// TODO Auto-generated method stub
-		ConnectionObject conn = ConnectionManager.borrowConnectionObject(connInfo);
+		ConnectionObject conn = null;
 		Statement stat = null;
 		ResultSet rs = null;
 		try 
 		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			rs = stat.executeQuery(sql);
 			return rs.getMetaData();
@@ -835,8 +985,63 @@ public class DataBase implements IDataBase{
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
 			}
-			
-			ConnectionManager.returnConnectionObject(conn);
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
+		}
+	}
+	@Override
+	public long getCount(String sql) {
+		// TODO Auto-generated method stub
+		//处理sql
+		String sql_c = "select count(*) ";
+		if(sql.contains("from") || sql.contains("FROM"))
+		{
+			sql = sql.replace(" FROM ", " from ");
+			sql_c += sql.substring(sql.indexOf("from"));
+		}
+		
+		ConnectionObject conn = null;
+		Statement stat = null;
+		ResultSet rs = null;
+		long count = 0;
+		try 
+		{
+			conn = ConnectionManager.borrowConnectionObject(connInfo);
+			stat = conn.getConnection().createStatement();
+			rs = stat.executeQuery(sql_c);
+			if(rs.next())
+			{
+				count = (long) rs.getDouble(1);
+			}
+			return count;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			DBCException.logException(DBCException.E_SQL, e);
+			return 0;
+		}
+		finally
+		{
+			try 
+			{
+				if(rs != null)
+				{
+					rs.close();
+				}
+				if(stat != null)
+				{
+					stat.close();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(conn != null)
+			{
+				ConnectionManager.returnConnectionObject(conn);
+			}
 		}
 	}
 

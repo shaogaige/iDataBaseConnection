@@ -60,11 +60,23 @@ public interface IDataBase {
 	 */
 	public ResultSetMetaData getMetaData(String sql);
 	/**
+	 * 获取本次查询的返回条数
+	 * @param sql
+	 * @return long
+	 */
+	public long getCount(String sql);
+	/**
 	 * 执行Select语句
 	 * @param sql
 	 * @return SQLResultSet
 	 */
 	public SQLResultSet exeSQLSelect(String sql);
+	/**
+	 * 执行Select语句,支持分页
+	 * @param sql start count
+	 * @return SQLResultSet
+	 */
+	public SQLResultSet exeSQLSelect(String sql,int start,int count);
 	/**
 	 * 执行Prepared Select语句
 	 * @param sql
@@ -72,6 +84,13 @@ public interface IDataBase {
 	 * @return SQLResultSet
 	 */
 	public SQLResultSet exePreparedSQLSelect(String sql,PreparedParam preparedParam);
+	/**
+	 * 执行Prepared Select语句，支持分页
+	 * @param sql
+	 * @param preparedParam
+	 * @return SQLResultSet
+	 */
+	public SQLResultSet exePreparedSQLSelect(String sql,PreparedParam preparedParam,int start,int count);
 	/**
 	 * 执行Update语句
 	 * @param sql
