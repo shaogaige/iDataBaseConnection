@@ -119,7 +119,7 @@ public class ResultSetUtil {
 		}
 	}
 	//获取Value
-	private static Value getValue(String columnName,int type,ResultSet rs)
+	public static Value getValue(String columnName,int type,ResultSet rs)
 	{
 		Value value = new Value(type);
 		try 
