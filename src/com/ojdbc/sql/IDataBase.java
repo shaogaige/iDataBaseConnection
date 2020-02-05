@@ -4,7 +4,6 @@
  */
 package com.ojdbc.sql;
 
-import java.sql.ResultSetMetaData;
 import java.util.List;
 import java.util.Map;
 
@@ -56,9 +55,9 @@ public interface IDataBase {
 	/**
 	 * 执行Select语句获取表信息
 	 * @param sql
-	 * @return ResultSetMetaData
+	 * @return SQLResultSet
 	 */
-	public ResultSetMetaData getMetaData(String sql);
+	public SQLResultSet getMetaData(String sql);
 	/**
 	 * 获取本次查询的返回条数
 	 * @param sql

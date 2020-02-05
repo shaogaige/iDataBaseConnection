@@ -148,7 +148,7 @@ public class Value {
 	}
 	
 	public boolean isDoubleValue() {
-		if(this.dataType==Types.FLOAT || this.dataType==Types.DOUBLE)
+		if(this.dataType==Types.FLOAT || this.dataType==Types.DOUBLE || this.dataType==Types.NUMERIC)
 		{
 			return true;
 		}

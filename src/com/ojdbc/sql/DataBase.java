@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,14 @@ public class DataBase implements IDataBase{
 	
 	//数据库连接
 	protected ConnectionInfo connInfo = null;
+	
+	/**
+	 * 无参构造函数
+	 */
+	public DataBase()
+	{
+		
+	}
 	/**
 	 * 构造函数
 	 * @param conn
@@ -55,7 +65,13 @@ public class DataBase implements IDataBase{
 	public String getConnectionString(){
 		return connInfo.getKey();	
 	}
-
+    /**
+     * 设置数据库连接字符串信息
+     * @param connInfo
+     */
+	public void setConnInfo(ConnectionInfo connInfo) {
+		this.connInfo = connInfo;
+	}
 	/**
 	 * 新建表
 	 * @param sql
@@ -180,7 +196,7 @@ public class DataBase implements IDataBase{
 		ConnectionObject conn = null;
 		Statement stat = null;
 		ResultSet rs = null;
-		try 
+		try
 		{
 			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
@@ -951,7 +967,7 @@ public class DataBase implements IDataBase{
 		
 	}
 	@Override
-	public ResultSetMetaData getMetaData(String sql) {
+	public SQLResultSet getMetaData(String sql) {
 		// TODO Auto-generated method stub
 		ConnectionObject conn = null;
 		Statement stat = null;
@@ -961,7 +977,23 @@ public class DataBase implements IDataBase{
 			conn = ConnectionManager.borrowConnectionObject(connInfo);
 			stat = conn.getConnection().createStatement();
 			rs = stat.executeQuery(sql);
-			return rs.getMetaData();
+			ResultSetMetaData resultMetaData = rs.getMetaData();
+			Map<String,Value> keyValue = new LinkedHashMap<String,Value>();
+			List<SQLRow> resultSet = new ArrayList<SQLRow>();
+			int size = resultMetaData.getColumnCount();
+			//获取所有列名称
+			for(int i=1;i<=size;i++)
+			{
+				keyValue.put("name", new Value().setString_value(resultMetaData.getColumnName(i)));
+				keyValue.put("label", new Value().setString_value(resultMetaData.getColumnLabel(i)));
+				keyValue.put("typename", new Value().setString_value(resultMetaData.getColumnTypeName(i)));
+				keyValue.put("type", new Value().setInt_value(resultMetaData.getColumnType(i)));
+				SQLRow row = new SQLRow(keyValue);
+				resultSet.add(row);
+			}
+			
+			SQLResultSet r = new SQLResultSet(resultSet);
+			return r;
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
