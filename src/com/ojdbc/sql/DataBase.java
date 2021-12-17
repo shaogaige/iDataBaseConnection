@@ -978,12 +978,12 @@ public class DataBase implements IDataBase{
 			stat = conn.getConnection().createStatement();
 			rs = stat.executeQuery(sql);
 			ResultSetMetaData resultMetaData = rs.getMetaData();
-			Map<String,Value> keyValue = new LinkedHashMap<String,Value>();
 			List<SQLRow> resultSet = new ArrayList<SQLRow>();
 			int size = resultMetaData.getColumnCount();
 			//获取所有列名称
 			for(int i=1;i<=size;i++)
 			{
+				Map<String,Value> keyValue = new LinkedHashMap<String,Value>();
 				keyValue.put("name", new Value().setString_value(resultMetaData.getColumnName(i)));
 				keyValue.put("label", new Value().setString_value(resultMetaData.getColumnLabel(i)));
 				keyValue.put("typename", new Value().setString_value(resultMetaData.getColumnTypeName(i)));
@@ -1027,13 +1027,8 @@ public class DataBase implements IDataBase{
 	public long getCount(String sql) {
 		// TODO Auto-generated method stub
 		//处理sql
-		String sql_c = "select count(*) ";
-		if(sql.contains("from") || sql.contains("FROM"))
-		{
-			sql = sql.replace(" FROM ", " from ");
-			sql_c += sql.substring(sql.indexOf("from"));
-		}
-		
+		String sql_c = "select count(*) from (";
+		sql_c += sql +") a1_databaseconnection";
 		ConnectionObject conn = null;
 		Statement stat = null;
 		ResultSet rs = null;

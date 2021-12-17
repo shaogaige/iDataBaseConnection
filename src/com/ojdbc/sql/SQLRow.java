@@ -87,5 +87,13 @@ public class SQLRow {
 	{
 		return this.row.containsKey(columnName);
 	}
+	/**
+	 * 获取整列数据
+	 * @return Map<String,Value>
+	 */
+	public Map<String,Value> getRow()
+	{
+		return this.row;
+	}
 
 }
