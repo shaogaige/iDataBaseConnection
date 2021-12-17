@@ -5,7 +5,6 @@
 package com.ojdbc.sql.core;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,17 +85,25 @@ public class DBConnectionFactory implements KeyedPoolableObjectFactory {
 			//设置为自动提交
 			ConnectionObject conn = (ConnectionObject)arg1;
 			try {
-				boolean f = conn.getConnection().getAutoCommit();
-				if(!f){
-					conn.getConnection().setAutoCommit(true);
+				if(conn.getConnection().isClosed())
+				{
+					return false;
 				}
-			} catch (SQLException e) {
+				if(conn.getConnection().isValid(3))
+				{
+					boolean f = conn.getConnection().getAutoCommit();
+					if(!f){
+						conn.getConnection().setAutoCommit(true);
+					}
+					return true;
+				}
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-				DBCException.logException(DBCException.E_ConnectionSetAutoCommit, e);
+				//e.printStackTrace();
+				DBCException.logException(DBCException.E_ValidConnection, e);
 				return false;
 			}
-			return true;
+			return false;
 		}
 		else
 		{
@@ -121,7 +128,7 @@ public class DBConnectionFactory implements KeyedPoolableObjectFactory {
 			conn = type.getConnection();
 			keyConnection.put(key, conn);
 		}
-		return keyConnection.get(key);
+		return conn;
 	}
 	//创建连接对象
 	private ConnectionObject createConnectionObject(String key)
